@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
-  "name": "Photo Sweep for Google Photos",
+  "name": "Photo Sweep for Google Photos™",
   "version": "1.0.0",
-  "description": "Bulk-delete photos from your Google Photos library. Runs entirely in your browser — nothing is uploaded anywhere.",
-  "permissions": ["activeTab", "scripting"],
+  "description": "Bulk-move photos to Trash from Google Photos™. Processes the page locally in your browser; nothing is uploaded.",
+  "permissions": ["activeTab"],
   "host_permissions": ["https://photos.google.com/*"],
   "action": {
     "default_popup": "popup.html",

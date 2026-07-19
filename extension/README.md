@@ -55,11 +55,26 @@ What's involved:
 - Review typically takes a few days; expect longer for a first submission
 - You'll need: 128×128 icon (included), at least one 1280×800 screenshot, a
   short and long description, and a privacy policy URL
+  ([PRIVACY.md](PRIVACY.md) is the draft text to publish at that URL)
 
 **Write the privacy policy honestly and it becomes an asset:** this extension
-collects nothing, transmits nothing, and requests only `activeTab`,
-`scripting`, and host access to `photos.google.com`. Reviewers scrutinise
+processes the Google Photos page locally so it can select photos and click the
+Trash flow. It stores no library data, transmits no library data, and requests
+only `activeTab` plus host access to `photos.google.com`. Reviewers scrutinise
 broad host permissions, so the narrow scope here helps.
+
+For the Chrome Web Store listing:
+
+- Single purpose: bulk-move Google Photos items to Trash from the Google Photos
+  web UI at the user's request.
+- Permission justification: `activeTab` lets the popup talk to the current tab;
+  `https://photos.google.com/*` lets the content script run only on Google
+  Photos.
+- Privacy fields should disclose local processing of website content /
+  user-generated content, with no collection, storage, sale, or transfer to the
+  developer or third parties.
+- Include this attribution in the long description: Google Photos is a trademark
+  of Google LLC. Use of this trademark is subject to Google Permissions.
 
 Be prepared for a rejection or two. A tool whose whole purpose is bulk-deleting
 data from a Google product invites scrutiny. Things that help: an unambiguous

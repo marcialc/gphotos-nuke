@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Photo Sweep">
+  <rect width="128" height="128" rx="28" fill="#17202a"/>
+  <rect x="28" y="27" width="55" height="70" rx="8" fill="#f7fbff" opacity=".16"/>
+  <rect x="36" y="21" width="64" height="74" rx="9" fill="#f7fbff"/>
+  <rect x="43" y="29" width="50" height="42" rx="4" fill="#d9f7f0"/>
+  <circle cx="54" cy="41" r="7" fill="#2dd4bf"/>
+  <path d="M43 66 59 51l12 11 8-8 14 12v5H43z" fill="#0f766e"/>
+  <path d="M26 93c23 10 53 8 76-7" fill="none" stroke="#f9735b" stroke-width="9" stroke-linecap="round"/>
+  <path d="M98 78h17l-8 15z" fill="#f9735b"/>
+  <circle cx="24" cy="31" r="4" fill="#fbbf24"/>
+  <circle cx="107" cy="33" r="3" fill="#7dd3fc"/>
+  <circle cx="22" cy="73" r="3" fill="#a78bfa"/>
+</svg>
