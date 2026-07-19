@@ -2,8 +2,8 @@
  * Photo Sweep — content script (the engine).
  *
  * Runs in an isolated world on photos.google.com. Receives start/stop messages
- * from the popup and reports progress back through chrome.storage.session, so
- * progress survives the popup being closed.
+ * from the popup and holds progress in `state`, which the popup polls via PING —
+ * so progress survives the popup being closed.
  *
  * All fragile selectors live in SEL below. If Google changes their UI, this is
  * the only block that should need patching.
@@ -42,9 +42,12 @@ let state = { status: 'idle', deleted: 0, cycles: 0, message: '' };
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
+// The popup polls this via PING. Keeping state here rather than in
+// chrome.storage.session is deliberate: session storage defaults to
+// TRUSTED_CONTEXTS, which excludes content scripts, and a reloaded tab gets a
+// fresh content script anyway — so persisted state could only ever be stale.
 function publish(patch) {
   state = { ...state, ...patch };
-  try { chrome.storage.session.set({ sweepState: state }); } catch (e) {}
 }
 
 // Google's UI binds jsaction handlers to mousedown AND click. A bare .click()
@@ -96,10 +99,10 @@ async function scrollDown() {
   return document.querySelectorAll(SEL.tileAny).length > before;
 }
 
-async function run({ limit, dryRun }) {
+async function run({ limit }) {
   if (running) return;
   running = true;
-  publish({ status: 'running', deleted: 0, cycles: 0, message: dryRun ? 'Counting…' : 'Starting…' });
+  publish({ status: 'running', deleted: 0, cycles: 0, inFlight: 0, goal: limit || 0, message: 'Starting…' });
 
   if (location.pathname.includes('/photo/')) {
     publish({ status: 'error', message: 'Close the open photo first, then try again.' });
@@ -130,23 +133,11 @@ async function run({ limit, dryRun }) {
     if (!batch.length) {
       if (await scrollDown()) { dead = 0; continue; }
       if (++dead < 3) continue;
-      publish({ status: 'done', message: dryRun ? 'Count complete.' : 'All done.' });
+      publish({ status: 'done', message: 'All done.' });
       running = false;
       return;
     }
     dead = 0;
-
-    if (dryRun) {
-      // Count only: never select, never delete. Just scroll through.
-      total += batch.length;
-      publish({ deleted: total, message: `Counted ${total} so far…` });
-      if (!(await scrollDown())) {
-        publish({ status: 'done', message: `Found about ${total} photos. Nothing was deleted.` });
-        running = false;
-        return;
-      }
-      continue;
-    }
 
     for (const el of batch) {
       if (!running) break;
@@ -161,6 +152,8 @@ async function run({ limit, dryRun }) {
       running = false;
       return;
     }
+    // sel photos are now selected and about to be trashed — surface that live.
+    publish({ inFlight: sel, message: `Moving ${sel} photos to Trash…` });
 
     const trash = await waitFor(trashBtn);
     if (!trash) {
@@ -183,7 +176,7 @@ async function run({ limit, dryRun }) {
 
     total += sel;
     cycles++;
-    publish({ deleted: total, cycles, message: `Moved ${total} photos to Trash…` });
+    publish({ deleted: total, cycles, inFlight: 0, message: `Moved ${total} photos to Trash…` });
 
     await sleep(CFG.gap);
     await scrollDown();
@@ -199,6 +192,7 @@ async function run({ limit, dryRun }) {
 chrome.runtime.onMessage.addListener((msg, _sender, reply) => {
   if (msg.type === 'START') { run(msg.options || {}); reply({ ok: true }); }
   if (msg.type === 'STOP')  { running = false; publish({ status: 'idle', message: 'Stopping…' }); reply({ ok: true }); }
+  if (msg.type === 'RESET') { running = false; state = { status: 'idle', deleted: 0, cycles: 0, inFlight: 0, message: '' }; reply({ ok: true }); }
   if (msg.type === 'PING')  { reply({ ok: true, state }); }
   return true;
 });

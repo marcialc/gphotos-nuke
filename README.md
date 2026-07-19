@@ -53,7 +53,7 @@ script if you need the tab to keep working while backgrounded. See
 ### Prefer not to touch the console?
 
 There's a point-and-click Chrome extension in **[`extension/`](extension/)**
-with the same engine, plus a count-only mode and a confirmation gate. See its
+with the same engine, plus a confirmation gate and a low default limit. See its
 [README](extension/README.md) for install steps.
 
 ---

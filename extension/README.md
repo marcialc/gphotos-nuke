@@ -16,16 +16,18 @@ password to delete your photos is not safe — don't use it.
 4. Tick "I have a backup", pick a limit, press the button
 5. Watch the counter; press Stop whenever
 
+The limit defaults to "50 photos (try it out)", so the natural first run is a
+small, fully-recoverable one before committing to the whole library.
+
 ## Safety design
 
 Deleting someone's entire photo library is not an undoable action, so the UI is
 built to slow people down at the right moments:
 
 - **The start button is locked** until the backup box is ticked.
-- **"Count only" mode** runs the whole loop without selecting or deleting
-  anything, so people can see the scale before committing.
 - **"Stop after 50 photos"** is the default. Everything is an explicit choice
-  further down the list, never the accident.
+  further down the list, never the accident. A 50-photo first run exercises the
+  whole pipeline while staying fully recoverable in Trash.
 - **Trash reminder** — a direct link, plus an explanation that Trash holds
   items ~60 days and still uses storage until emptied.
 - **Phone backup warning** shown before the button, not buried in a FAQ.
@@ -55,20 +57,19 @@ What's involved:
   short and long description, and a privacy policy URL
 
 **Write the privacy policy honestly and it becomes an asset:** this extension
-collects nothing, transmits nothing, and requests only `storage`, `activeTab`,
+collects nothing, transmits nothing, and requests only `activeTab`,
 `scripting`, and host access to `photos.google.com`. Reviewers scrutinise
 broad host permissions, so the narrow scope here helps.
 
 Be prepared for a rejection or two. A tool whose whole purpose is bulk-deleting
 data from a Google product invites scrutiny. Things that help: an unambiguous
-description, the confirmation gate, the count-only mode, and a clear statement
+description, the confirmation gate, the low default limit, and a clear statement
 that deletions go to Trash and are recoverable for ~60 days.
 
 ## Firefox
 
-The manifest is close to Firefox-compatible. The main changes: Firefox uses
-`browser.*` (or the `webextension-polyfill` shim), and
-`chrome.storage.session` support differs. Not done here — PRs welcome.
+The manifest is close to Firefox-compatible. The main change: Firefox uses
+`browser.*` (or the `webextension-polyfill` shim). Not done here — PRs welcome.
 
 ## When Google changes their UI
 

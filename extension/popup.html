@@ -17,6 +17,9 @@
     --primary-quiet:  #e8f0fe;
     --caution:        #b3261e;
     --caution-quiet:  #fceeed;
+    --success:        #1e8e3e;
+    --on-success:     #ffffff;
+    --success-quiet:  #e6f4ea;
     --disabled-bg:    #e3e5e8;
     --disabled-fg:    #a2a6ab;
     --shadow:         0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
@@ -35,6 +38,9 @@
       --primary-quiet:  #1f2b3f;
       --caution:        #f2b8b5;
       --caution-quiet:  #33211f;
+      --success:        #81c995;
+      --on-success:     #0a3818;
+      --success-quiet:  #1c2b20;
       --disabled-bg:    #2c2e31;
       --disabled-fg:    #62666b;
       --shadow:         0 1px 2px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.2);
@@ -145,7 +151,7 @@
   button:active:not(:disabled) { transform: scale(.985); }
   button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
   button:disabled { background: var(--disabled-bg); color: var(--disabled-fg); cursor: not-allowed; }
-  button.stop { background: var(--caution); color: #fff; }
+  button.stop { background: var(--caution); color: #fff; margin-top: 10px; }
   button.stop:hover { background: var(--caution); filter: brightness(.92); }
   button.ghost {
     background: transparent; color: var(--primary);
@@ -176,6 +182,145 @@
   }
   .msg.err { color: var(--caution); }
 
+  /* ---- running progress ---- */
+  .progress {
+    margin-top: 16px; padding: 16px 16px 14px;
+    background: var(--surface-sub); border-radius: 16px;
+    animation: panel-in .3s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes panel-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .progress-top {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  }
+  .progress-num {
+    font: 600 34px/1 "Google Sans", Roboto, ui-sans-serif, sans-serif;
+    font-variant-numeric: tabular-nums; letter-spacing: -.03em; color: var(--primary);
+  }
+  .progress-num #pnum { display: inline-block; }
+  .progress-num .goal {
+    font-size: 16px; font-weight: 500; color: var(--on-surface-var); letter-spacing: 0;
+  }
+  .pop { animation: pop .35s cubic-bezier(.34,1.56,.64,1); }
+  @keyframes pop {
+    0%   { transform: scale(1); }
+    30%  { transform: scale(1.16); }
+    100% { transform: scale(1); }
+  }
+
+  /* live "being deleted" chip */
+  .live {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 5px 11px 5px 8px; border-radius: 100px;
+    background: var(--primary-quiet); color: var(--primary);
+    font-size: 11.5px; font-weight: 500; white-space: nowrap;
+  }
+  .spinner {
+    width: 13px; height: 13px; border-radius: 50%; flex: none;
+    background: conic-gradient(from 0deg, transparent 0 12%, var(--primary));
+    -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 0);
+            mask: radial-gradient(farthest-side, transparent calc(100% - 2.5px), #000 0);
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .bar {
+    position: relative; height: 8px; margin: 15px 0 10px;
+    background: var(--surface-high); border-radius: 100px; overflow: hidden;
+  }
+  .bar-fill {
+    position: absolute; top: 0; bottom: 0; left: 0; width: 0;
+    background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+    border-radius: 100px; transition: width .5s cubic-bezier(.22,1,.36,1);
+  }
+  /* moving sheen sweeping across the filled portion */
+  .bar-fill::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
+    animation: sheen 1.4s linear infinite;
+  }
+  /* indeterminate: no known goal ("Everything") — a slug slides across */
+  .bar.indet .bar-fill {
+    width: 38%; transition: none;
+    background: linear-gradient(90deg, transparent, var(--primary), var(--primary-hover), transparent);
+    animation: indet 1.3s cubic-bezier(.65,.05,.36,1) infinite;
+  }
+  .bar.indet .bar-fill::after { display: none; }
+  @keyframes indet {
+    0%   { left: -40%; }
+    100% { left: 100%; }
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-size: 11px; color: var(--on-surface-var);
+  }
+  .progress-meta .pct {
+    font-variant-numeric: tabular-nums; font-weight: 500; color: var(--on-surface);
+  }
+  /* ---- success / done ---- */
+  .done {
+    margin-top: 16px; padding: 26px 18px 20px;
+    background: var(--surface-sub); border-radius: 16px;
+    text-align: center;
+    animation: panel-in .3s cubic-bezier(.22,1,.36,1);
+  }
+  .done-mark { position: relative; width: 76px; height: 76px; margin: 0 auto 14px; }
+  .done-mark svg { display: block; overflow: visible; }
+  /* expanding ripple ring, one pulse */
+  .dc-ring {
+    fill: none; stroke: var(--success); stroke-width: 2;
+    transform-origin: center; transform: scale(.55); opacity: .5;
+    animation: ring-out .8s .16s cubic-bezier(.2,0,0,1) both;
+  }
+  /* filled disc scales in with a restrained Material overshoot */
+  .dc-disc {
+    fill: var(--success); transform-origin: center; transform: scale(0);
+    animation: disc-in .46s cubic-bezier(.34,1.32,.64,1) both;
+  }
+  /* check draws along its own path */
+  .dc-tick {
+    fill: none; stroke: var(--on-success); stroke-width: 5;
+    stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 40; stroke-dashoffset: 40;
+    animation: tick-in .4s .3s cubic-bezier(.2,0,0,1) forwards;
+  }
+  @keyframes disc-in  { from { transform: scale(0); }   to { transform: scale(1); } }
+  @keyframes tick-in  { to { stroke-dashoffset: 0; } }
+  @keyframes ring-out { from { transform: scale(.55); opacity: .5; }
+                        to   { transform: scale(1.3);  opacity: 0;  } }
+
+  .done-title {
+    font: 500 18px/1.2 "Google Sans", Roboto, ui-sans-serif, sans-serif;
+    letter-spacing: -.01em; color: var(--on-surface);
+    opacity: 0; animation: rise .4s .34s cubic-bezier(.2,0,0,1) both;
+  }
+  .done-count {
+    margin-top: 5px; font-size: 13px; color: var(--on-surface-var);
+    opacity: 0; animation: rise .4s .42s cubic-bezier(.2,0,0,1) both;
+  }
+  .done-count b {
+    font-weight: 600; color: var(--success); font-variant-numeric: tabular-nums;
+  }
+  .done-note {
+    margin: 4px 0 16px; font-size: 11.5px; color: var(--on-surface-var);
+    opacity: 0; animation: rise .4s .5s cubic-bezier(.2,0,0,1) both;
+  }
+  .done .again {
+    opacity: 0; animation: rise .4s .58s cubic-bezier(.2,0,0,1) both;
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .progress, .spinner, .bar-fill::after, .bar.indet .bar-fill, .pop,
+    .done, .dc-ring, .dc-disc, .dc-tick,
+    .done-title, .done-count, .done-note, .done .again { animation: none; }
+    .dc-disc { transform: scale(1); }
+    .dc-tick { stroke-dashoffset: 0; }
+    .done-title, .done-count, .done-note, .done .again { opacity: 1; }
+  }
+
   .hidden { display: none; }
   footer {
     margin-top: 14px; color: var(--on-surface-var);
@@ -192,7 +337,7 @@
     </div>
   </header>
 
-  <div class="notice">
+  <div class="notice cfg">
     <div class="notice-head">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
         <path d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/>
@@ -207,20 +352,15 @@
       otherwise these deletions can sync back to it.</p>
   </div>
 
-  <fieldset>
+  <fieldset class="cfg">
     <label class="row">
       <input type="checkbox" id="ack">
       <span>I have a backup, or I don't want these photos
         <small>Required before deleting.</small></span>
     </label>
-    <label class="row">
-      <input type="checkbox" id="dry">
-      <span>Count only, delete nothing
-        <small>A safe way to see how many photos are there.</small></span>
-    </label>
   </fieldset>
 
-  <div class="limit">
+  <div class="limit cfg">
     <label for="limit">Stop after</label>
     <select id="limit">
       <option value="50">50 photos (try it out)</option>
@@ -230,11 +370,39 @@
     </select>
   </div>
 
-  <button id="start" disabled>Start</button>
-  <button id="stop" class="stop hidden">Stop</button>
+  <button id="start" class="cfg" disabled>Start</button>
+
+  <div class="progress run-only hidden" id="progress" role="status" aria-live="polite">
+    <div class="progress-top">
+      <div class="progress-num"><span id="pnum">0</span><span class="goal" id="pgoal"></span></div>
+      <div class="live"><span class="spinner"></span><span id="plabel">Working…</span></div>
+    </div>
+    <div class="bar" id="bar"><div class="bar-fill" id="barfill"></div></div>
+    <div class="progress-meta">
+      <span id="pmeta">moved to Trash</span>
+      <span class="pct" id="ppct"></span>
+    </div>
+  </div>
+
+  <button id="stop" class="stop run-only hidden">Stop</button>
+
+  <div class="done done-only hidden" id="done" role="status" aria-live="polite">
+    <div class="done-mark">
+      <svg viewBox="0 0 76 76" width="76" height="76" aria-hidden="true">
+        <circle class="dc-ring" cx="38" cy="38" r="35"/>
+        <circle class="dc-disc" cx="38" cy="38" r="31"/>
+        <path class="dc-tick" d="M25 39 l9 9 l17 -19"/>
+      </svg>
+    </div>
+    <div class="done-title">All done</div>
+    <div class="done-count"><b id="dnum">0</b> photos moved to Trash</div>
+    <div class="done-note">They stay recoverable for about 60 days.</div>
+    <button class="ghost again" id="again">Delete more</button>
+  </div>
+
   <button id="trashLink" class="ghost">Open Trash to free up space</button>
 
-  <div class="status">
+  <div class="status cfg">
     <div class="count"><span id="n">0</span> <small>moved to Trash</small></div>
     <div class="msg" id="msg">Ready when you are.</div>
   </div>
