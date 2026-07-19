@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<style>
+  :root {
+    --ink:      #14181d;
+    --paper:    #eef1f4;
+    --steel:    #5b6672;
+    --hairline: #c9d1d9;
+    --caution:  #b4531a;
+    --go:       #1f6f4a;
+    --lock:     #8b95a1;
+  }
+  * { box-sizing: border-box; }
+  body {
+    width: 320px; margin: 0; padding: 18px 18px 16px;
+    background: var(--paper); color: var(--ink);
+    font: 13px/1.45 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  h1 {
+    margin: 0 0 2px; font-size: 15px; font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .sub { margin: 0 0 14px; color: var(--steel); font-size: 12px; }
+
+  .notice {
+    border-left: 3px solid var(--caution);
+    padding: 9px 10px; margin-bottom: 14px;
+    background: #fff; font-size: 12px; line-height: 1.5;
+  }
+  .notice b { font-weight: 650; }
+  .notice a { color: var(--caution); }
+
+  fieldset { border: 0; margin: 0 0 12px; padding: 0; }
+  label.row {
+    display: flex; gap: 9px; align-items: flex-start;
+    padding: 8px 0; border-top: 1px solid var(--hairline);
+    cursor: pointer;
+  }
+  label.row:last-of-type { border-bottom: 1px solid var(--hairline); }
+  label.row input { margin: 2px 0 0; flex: none; }
+  label.row span { font-size: 12px; }
+  label.row small { display: block; color: var(--steel); }
+
+  .limit { display: flex; align-items: center; gap: 8px; margin: 12px 0 14px; }
+  .limit select {
+    flex: 1; padding: 6px 8px; font: inherit;
+    border: 1px solid var(--hairline); background: #fff; color: var(--ink);
+  }
+
+  button {
+    width: 100%; padding: 11px; font: inherit; font-weight: 600;
+    border: 0; cursor: pointer; color: #fff; background: var(--go);
+  }
+  button:disabled { background: var(--lock); cursor: not-allowed; }
+  button.stop { background: var(--caution); }
+  button.ghost {
+    background: transparent; color: var(--steel);
+    border: 1px solid var(--hairline); margin-top: 8px; font-weight: 500;
+  }
+
+  .status { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hairline); }
+  .count {
+    font: 600 26px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  }
+  .count small { font: 500 11px/1 ui-sans-serif, sans-serif; color: var(--steel); }
+  .msg { margin-top: 6px; color: var(--steel); font-size: 12px; min-height: 17px; }
+  .msg.err { color: var(--caution); }
+  .hidden { display: none; }
+  footer { margin-top: 14px; color: var(--lock); font-size: 11px; text-align: center; }
+</style>
+</head>
+<body>
+  <h1>Photo Sweep</h1>
+  <p class="sub">Moves photos from your library to Trash, in bulk.</p>
+
+  <div class="notice">
+    <b>Back up first.</b> Photos sit in Trash for about 60 days, then they're
+    gone for good. Export a copy from
+    <a href="https://takeout.google.com" target="_blank">Google Takeout</a>
+    before you start.
+    <br><br>
+    If your phone backs up here, turn backup off on the phone first — otherwise
+    these deletions can sync back to it.
+  </div>
+
+  <fieldset>
+    <label class="row">
+      <input type="checkbox" id="ack">
+      <span>I have a backup, or I don't want these photos
+        <small>Required before deleting.</small></span>
+    </label>
+    <label class="row">
+      <input type="checkbox" id="dry">
+      <span>Count only, delete nothing
+        <small>A safe way to see how many photos are there.</small></span>
+    </label>
+  </fieldset>
+
+  <div class="limit">
+    <label for="limit">Stop after</label>
+    <select id="limit">
+      <option value="50">50 photos (try it out)</option>
+      <option value="500">500 photos</option>
+      <option value="5000">5,000 photos</option>
+      <option value="0">Everything</option>
+    </select>
+  </div>
+
+  <button id="start" disabled>Start</button>
+  <button id="stop" class="stop hidden">Stop</button>
+  <button id="trashLink" class="ghost">Open Trash to free up space</button>
+
+  <div class="status">
+    <div class="count"><span id="n">0</span> <small>moved to Trash</small></div>
+    <div class="msg" id="msg">Ready when you are.</div>
+  </div>
+
+  <footer>Runs in your browser. Nothing is uploaded.</footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
