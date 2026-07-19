@@ -4,86 +4,207 @@
 <meta charset="utf-8">
 <style>
   :root {
-    --ink:      #14181d;
-    --paper:    #eef1f4;
-    --steel:    #5b6672;
-    --hairline: #c9d1d9;
-    --caution:  #b4531a;
-    --go:       #1f6f4a;
-    --lock:     #8b95a1;
+    /* Material 3 tonal palette, light */
+    --surface:        #ffffff;
+    --surface-sub:    #f1f3f6;
+    --surface-high:   #e8eaef;
+    --on-surface:     #1b1c1e;
+    --on-surface-var: #5f6368;
+    --outline:        #dadce0;
+    --primary:        #0b57d0;
+    --on-primary:     #ffffff;
+    --primary-hover:  #0a4cb8;
+    --primary-quiet:  #e8f0fe;
+    --caution:        #b3261e;
+    --caution-quiet:  #fceeed;
+    --disabled-bg:    #e3e5e8;
+    --disabled-fg:    #a2a6ab;
+    --shadow:         0 1px 2px rgba(0,0,0,.06), 0 1px 3px rgba(0,0,0,.04);
   }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface:        #1b1c1e;
+      --surface-sub:    #232528;
+      --surface-high:   #2c2e31;
+      --on-surface:     #e3e3e5;
+      --on-surface-var: #a5a9ae;
+      --outline:        #3a3d41;
+      --primary:        #a8c7fa;
+      --on-primary:     #062e6f;
+      --primary-hover:  #bdd5fb;
+      --primary-quiet:  #1f2b3f;
+      --caution:        #f2b8b5;
+      --caution-quiet:  #33211f;
+      --disabled-bg:    #2c2e31;
+      --disabled-fg:    #62666b;
+      --shadow:         0 1px 2px rgba(0,0,0,.3), 0 1px 3px rgba(0,0,0,.2);
+    }
+  }
+
   * { box-sizing: border-box; }
+
   body {
-    width: 320px; margin: 0; padding: 18px 18px 16px;
-    background: var(--paper); color: var(--ink);
-    font: 13px/1.45 ui-sans-serif, -apple-system, "Segoe UI", Roboto, sans-serif;
+    width: 340px; margin: 0; padding: 20px 16px 16px;
+    background: var(--surface); color: var(--on-surface);
+    font: 400 13px/1.5 "Google Sans Text", "Google Sans", Roboto,
+          -apple-system, "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---- header ---- */
+  header { display: flex; align-items: center; gap: 12px; padding: 0 4px; }
+  header img {
+    width: 36px; height: 36px; border-radius: 9px; flex: none;
+    box-shadow: var(--shadow);
   }
   h1 {
-    margin: 0 0 2px; font-size: 15px; font-weight: 650;
-    letter-spacing: -0.01em;
+    margin: 0; font-size: 16px; font-weight: 500;
+    letter-spacing: -.005em; line-height: 1.25;
   }
-  .sub { margin: 0 0 14px; color: var(--steel); font-size: 12px; }
+  .sub { margin: 1px 0 0; color: var(--on-surface-var); font-size: 12px; }
 
+  /* ---- notice ---- */
   .notice {
-    border-left: 3px solid var(--caution);
-    padding: 9px 10px; margin-bottom: 14px;
-    background: #fff; font-size: 12px; line-height: 1.5;
+    margin: 18px 0 16px; padding: 12px 14px;
+    background: var(--caution-quiet); border-radius: 12px;
+    font-size: 12px; line-height: 1.55; color: var(--on-surface);
   }
-  .notice b { font-weight: 650; }
-  .notice a { color: var(--caution); }
+  .notice-head {
+    display: flex; align-items: center; gap: 7px;
+    font-weight: 500; color: var(--caution); margin-bottom: 4px;
+  }
+  .notice-head svg { flex: none; }
+  .notice p { margin: 0 0 8px; }
+  .notice p:last-child { margin-bottom: 0; }
+  .notice a { color: var(--caution); text-decoration-thickness: 1px; text-underline-offset: 2px; }
 
-  fieldset { border: 0; margin: 0 0 12px; padding: 0; }
+  /* ---- option rows ---- */
+  fieldset {
+    border: 0; margin: 0; padding: 4px;
+    background: var(--surface-sub); border-radius: 14px;
+  }
   label.row {
-    display: flex; gap: 9px; align-items: flex-start;
-    padding: 8px 0; border-top: 1px solid var(--hairline);
-    cursor: pointer;
+    display: flex; gap: 12px; align-items: flex-start;
+    padding: 11px 12px; border-radius: 10px; cursor: pointer;
+    transition: background .15s ease;
   }
-  label.row:last-of-type { border-bottom: 1px solid var(--hairline); }
-  label.row input { margin: 2px 0 0; flex: none; }
-  label.row span { font-size: 12px; }
-  label.row small { display: block; color: var(--steel); }
+  label.row:hover { background: var(--surface-high); }
+  label.row span { font-size: 13px; line-height: 1.35; }
+  label.row small {
+    display: block; margin-top: 2px;
+    color: var(--on-surface-var); font-size: 11.5px; line-height: 1.4;
+  }
 
-  .limit { display: flex; align-items: center; gap: 8px; margin: 12px 0 14px; }
+  /* Material checkbox */
+  input[type=checkbox] {
+    appearance: none; -webkit-appearance: none;
+    width: 18px; height: 18px; margin: 0; flex: none;
+    border: 2px solid var(--on-surface-var); border-radius: 5px;
+    background: transparent; cursor: pointer; position: relative;
+    transition: background .15s ease, border-color .15s ease;
+  }
+  input[type=checkbox]:checked {
+    background: var(--primary); border-color: var(--primary);
+  }
+  input[type=checkbox]:checked::after {
+    content: ""; position: absolute; left: 4.5px; top: 1px;
+    width: 4px; height: 9px; border: solid var(--on-primary);
+    border-width: 0 2px 2px 0; transform: rotate(43deg);
+  }
+  input[type=checkbox]:focus-visible {
+    outline: 2px solid var(--primary); outline-offset: 2px;
+  }
+
+  /* ---- limit select ---- */
+  .limit {
+    display: flex; align-items: center; gap: 10px;
+    margin: 14px 2px 18px;
+  }
+  .limit > label { color: var(--on-surface-var); font-size: 12px; flex: none; }
   .limit select {
-    flex: 1; padding: 6px 8px; font: inherit;
-    border: 1px solid var(--hairline); background: #fff; color: var(--ink);
+    flex: 1; padding: 9px 32px 9px 12px; font: inherit; font-size: 12.5px;
+    color: var(--on-surface); background: var(--surface);
+    border: 1px solid var(--outline); border-radius: 10px;
+    appearance: none; -webkit-appearance: none; cursor: pointer;
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 10px center;
+    transition: border-color .15s ease;
   }
+  .limit select:hover { border-color: var(--on-surface-var); }
+  .limit select:focus-visible { outline: none; border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
 
+  /* ---- buttons ---- */
   button {
-    width: 100%; padding: 11px; font: inherit; font-weight: 600;
-    border: 0; cursor: pointer; color: #fff; background: var(--go);
+    width: 100%; padding: 12px; font: inherit; font-size: 13.5px; font-weight: 500;
+    border: 0; border-radius: 100px; cursor: pointer;
+    color: var(--on-primary); background: var(--primary);
+    letter-spacing: .01em;
+    transition: background .15s ease, box-shadow .15s ease, transform .06s ease;
   }
-  button:disabled { background: var(--lock); cursor: not-allowed; }
-  button.stop { background: var(--caution); }
+  button:hover:not(:disabled) { background: var(--primary-hover); box-shadow: var(--shadow); }
+  button:active:not(:disabled) { transform: scale(.985); }
+  button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+  button:disabled { background: var(--disabled-bg); color: var(--disabled-fg); cursor: not-allowed; }
+  button.stop { background: var(--caution); color: #fff; }
+  button.stop:hover { background: var(--caution); filter: brightness(.92); }
   button.ghost {
-    background: transparent; color: var(--steel);
-    border: 1px solid var(--hairline); margin-top: 8px; font-weight: 500;
+    background: transparent; color: var(--primary);
+    border: 1px solid var(--outline); margin-top: 8px; font-weight: 500;
   }
+  button.ghost:hover { background: var(--primary-quiet); border-color: transparent; box-shadow: none; }
 
-  .status { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--hairline); }
-  .count {
-    font: 600 26px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+  /* ---- status ---- */
+  .status {
+    display: flex; align-items: center; gap: 12px;
+    margin-top: 16px; padding: 12px 14px;
+    background: var(--surface-sub); border-radius: 14px;
   }
-  .count small { font: 500 11px/1 ui-sans-serif, sans-serif; color: var(--steel); }
-  .msg { margin-top: 6px; color: var(--steel); font-size: 12px; min-height: 17px; }
+  .count {
+    font: 500 24px/1 "Google Sans", Roboto, ui-sans-serif, sans-serif;
+    font-variant-numeric: tabular-nums; letter-spacing: -.02em;
+    color: var(--primary); flex: none;
+  }
+  .count small {
+    display: block; margin-top: 3px;
+    font-family: inherit; font-size: 11px; font-weight: 400; line-height: 1;
+    color: var(--on-surface-var); letter-spacing: 0;
+  }
+  .msg {
+    color: var(--on-surface-var); font-size: 12px; line-height: 1.4;
+    border-left: 1px solid var(--outline); padding-left: 12px; align-self: stretch;
+    display: flex; align-items: center;
+  }
   .msg.err { color: var(--caution); }
+
   .hidden { display: none; }
-  footer { margin-top: 14px; color: var(--lock); font-size: 11px; text-align: center; }
+  footer {
+    margin-top: 14px; color: var(--on-surface-var);
+    font-size: 11px; text-align: center; opacity: .8;
+  }
 </style>
 </head>
 <body>
-  <h1>Photo Sweep</h1>
-  <p class="sub">Moves photos from your library to Trash, in bulk.</p>
+  <header>
+    <img src="icons/logo.png" alt="">
+    <div>
+      <h1>Photo Sweep</h1>
+      <p class="sub">Moves photos to Trash, in bulk.</p>
+    </div>
+  </header>
 
   <div class="notice">
-    <b>Back up first.</b> Photos sit in Trash for about 60 days, then they're
-    gone for good. Export a copy from
-    <a href="https://takeout.google.com" target="_blank">Google Takeout</a>
-    before you start.
-    <br><br>
-    If your phone backs up here, turn backup off on the phone first — otherwise
-    these deletions can sync back to it.
+    <div class="notice-head">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 2 1 21h22L12 2zm1 15h-2v-2h2v2zm0-4h-2V9h2v4z"/>
+      </svg>
+      Back up first
+    </div>
+    <p>Photos sit in Trash for about 60 days, then they're gone for good.
+      Export a copy from
+      <a href="https://takeout.google.com" target="_blank">Google Takeout</a>
+      before you start.</p>
+    <p>If your phone backs up here, turn backup off on the phone first —
+      otherwise these deletions can sync back to it.</p>
   </div>
 
   <fieldset>
