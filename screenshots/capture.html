@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=1280, initial-scale=1">
+<title>Photo Sweep Screenshots</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; width: 1280px; height: 800px; overflow: hidden; }
+  body {
+    background: #f7f9fc;
+    color: #202124;
+    font: 400 15px/1.45 "Google Sans Text", "Google Sans", Roboto,
+          -apple-system, "Segoe UI", system-ui, sans-serif;
+  }
+  .stage {
+    position: relative;
+    width: 1280px;
+    height: 800px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,.94), rgba(247,249,252,.9)),
+      radial-gradient(circle at 18% 18%, rgba(66,133,244,.13), transparent 28%),
+      radial-gradient(circle at 84% 24%, rgba(52,168,83,.12), transparent 24%),
+      #f7f9fc;
+  }
+  .photos {
+    position: absolute;
+    inset: 76px 420px 168px 58px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-auto-rows: 128px;
+    gap: 10px;
+    opacity: .92;
+  }
+  .tile {
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    background: #dfe6ee;
+    box-shadow: inset 0 0 0 1px rgba(60,64,67,.06);
+  }
+  .tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--bg);
+  }
+  .tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 56%, rgba(0,0,0,.2));
+  }
+  .chrome {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 32px;
+    background: rgba(255,255,255,.9);
+    border-bottom: 1px solid #e5e8ed;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: #3c4043;
+  }
+  .mark {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background:
+      conic-gradient(from 45deg, #4285f4 0 25%, #34a853 0 50%,
+        #fbbc04 0 75%, #ea4335 0);
+  }
+  .search {
+    flex: 1;
+    max-width: 560px;
+    height: 38px;
+    border-radius: 19px;
+    background: #eef1f5;
+  }
+  .caption {
+    position: absolute;
+    left: 70px;
+    bottom: 92px;
+    width: 640px;
+  }
+  .caption h1 {
+    margin: 0 0 8px;
+    font-size: 28px;
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .caption p {
+    margin: 0;
+    color: #5f6368;
+    font-size: 16px;
+  }
+  .popup-wrap {
+    position: absolute;
+    right: 86px;
+    top: 12px;
+    width: 382px;
+    padding: 18px 20px;
+    border-radius: 28px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(60,64,67,.22), 0 2px 8px rgba(60,64,67,.08);
+  }
+  iframe {
+    display: block;
+    width: 340px;
+    height: 660px;
+    border: 0;
+    border-radius: 14px;
+    background: #fff;
+  }
+  .badge { display: none; }
+</style>
+</head>
+<body>
+  <main class="stage">
+    <div class="chrome">
+      <div class="brand"><span class="mark"></span><span>Google Photos</span></div>
+      <div class="search"></div>
+    </div>
+    <div class="photos" aria-hidden="true">
+      <div class="tile" style="--bg:linear-gradient(135deg,#b8d8f7,#f7d7c4)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#d7ead4,#5ea77a)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#f8d775,#d68654)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#b4c6e7,#6d7fa5)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#efe6dd,#b78968)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#c9e7ec,#477a8a)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#f4b6b2,#8e4f63)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#d9d3f2,#7d6ca8)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#e9f0c6,#869747)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#f3d1a6,#c6644f)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#b7d4ef,#2f6fa1)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#e6e0cc,#776c52)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#cce2dd,#498173)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#f2b9ca,#a34368)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#d2e7f5,#7aa1c4)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#f6e0a8,#c88c35)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#c8ded1,#557463)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#eed1c9,#a85e4c)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#d5e0f1,#506b95)"></div>
+      <div class="tile" style="--bg:linear-gradient(135deg,#e3ddd2,#8b7b63)"></div>
+    </div>
+
+    <section class="caption">
+      <h1 id="title">Bulk move photos to Trash from the web UI</h1>
+      <p id="desc">The extension runs locally in the active Google Photos tab and keeps a small recoverable first-run limit by default.</p>
+    </section>
+
+    <div class="popup-wrap">
+      <iframe id="popup" src="../extension/popup.html"></iframe>
+    </div>
+
+    <aside class="badge" id="badge">
+      <strong>Local browser automation</strong>
+      Nothing is uploaded or sent to a server.
+    </aside>
+  </main>
+
+<script>
+  const SHOTS = {
+    ready: {
+      title: 'Start with a backup check',
+      desc: 'The delete button stays locked until the user confirms they have a backup or no longer want the photos.',
+      badge: ['Default limit: 50 photos', 'A small first run is recoverable from Trash.'],
+      state: { status: 'idle', deleted: 0, message: 'Ready when you are.' },
+    },
+    armed: {
+      title: 'Choose a safe stopping point',
+      desc: 'Users can try 50 photos first, then choose larger limits only when they are ready.',
+      badge: ['User-controlled runs', 'Stop after 50, 500, 5,000, or everything.'],
+      checked: true,
+      limit: '500',
+      state: { status: 'idle', deleted: 0, message: 'Ready when you are.' },
+    },
+    running: {
+      title: 'Watch progress while it works',
+      desc: 'The popup polls the content script, so progress is visible even if the popup was closed and reopened.',
+      badge: ['Live progress', 'The user can press Stop at any time.'],
+      state: { status: 'running', deleted: 132, goal: 500, inFlight: 24, message: 'Working...' },
+    },
+    everything: {
+      title: 'Large libraries stay user controlled',
+      desc: 'For full-library sweeps, the progress indicator switches to an indeterminate mode while photos continue moving.',
+      badge: ['Everything mode', 'Still runs locally on photos.google.com only.'],
+      state: { status: 'running', deleted: 1840, goal: 0, inFlight: 200, message: 'Working...' },
+    },
+    done: {
+      title: 'Review Trash before freeing space',
+      desc: 'Moved photos remain recoverable in Trash for about 60 days, and the popup links directly there.',
+      badge: ['Recoverable first', 'Trash can be reviewed before it is emptied.'],
+      state: { status: 'done', deleted: 500, message: 'Done.' },
+    },
+  };
+
+  const params = new URLSearchParams(location.search);
+  const shot = SHOTS[params.get('shot')] || SHOTS.ready;
+
+  title.textContent = shot.title;
+  desc.textContent = shot.desc;
+  badge.innerHTML = `<strong>${shot.badge[0]}</strong>${shot.badge[1]}`;
+
+  popup.addEventListener('load', () => {
+    const win = popup.contentWindow;
+    const doc = popup.contentDocument;
+    // Freeze every animated/transitioned property so screenshots never
+    // land mid-tween (e.g. Start unlocking from disabled gray → primary).
+    const settle = doc.createElement('style');
+    settle.textContent = `
+      *, *::before, *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+      .progress, .done,
+      .done-title, .done-count, .done-note, .done .again {
+        opacity: 1 !important;
+        transform: none !important;
+      }
+      .dc-disc { transform: scale(1) !important; }
+      .dc-tick { stroke-dashoffset: 0 !important; }
+    `;
+    doc.head.append(settle);
+    const footer = doc.querySelector('footer');
+    if (footer) footer.style.display = 'none';
+    if (shot.checked) doc.getElementById('ack').checked = true;
+    if (shot.limit) doc.getElementById('limit').value = shot.limit;
+    if (win.syncStart) win.syncStart();
+    if (win.render) win.render(shot.state);
+    // Signal the outer page that the popup is fully settled for capture.
+    document.documentElement.dataset.ready = '1';
+  });
+</script>
+</body>
+</html>
